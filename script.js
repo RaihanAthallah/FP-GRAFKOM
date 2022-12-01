@@ -21,9 +21,6 @@ Check out my YouTube channel for other game tutorials: https://www.youtube.com/c
 
 */
 
-import * as THREE from "https://cdnjs.cloudflare.com/ajax/libs/three.js/r124/three.min.js";
-import * as CANNON from "ttps://cdnjs.cloudflare.com/ajax/libs/cannon.js/0.6.2/cannon.min.js";
-
 window.focus(); // Capture keys right away (by default focus is on editor)
 
 let camera, scene, renderer; // ThreeJS globals
@@ -76,6 +73,7 @@ function init() {
     100 // far plane
   );
 
+  /*
   // If you want to use perspective camera instead, uncomment these lines
   camera = new THREE.PerspectiveCamera(
     45, // field of view
@@ -83,6 +81,7 @@ function init() {
     1, // near plane
     100 // far plane
   );
+  */
 
   camera.position.set(4, 4, 4);
   camera.lookAt(0, 0, 0);
