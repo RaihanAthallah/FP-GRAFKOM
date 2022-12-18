@@ -41,16 +41,15 @@ function init() {
   const width = 10;
   const height = width / aspect;
 
-  camera = new THREE.OrthographicCamera(
-    width / -2, // left
-    width / 2, // right
-    height / 2, // top
-    height / -2, // bottom
-    0, // near plane
-    100 // far plane
-  );
+  // camera = new THREE.OrthographicCamera(
+  //   width / -2, // left
+  //   width / 2, // right
+  //   height / 2, // top
+  //   height / -2, // bottom
+  //   0, // near plane
+  //   100 // far plane
+  // );
 
-  /*
   // If you want to use perspective camera instead, uncomment these lines
   camera = new THREE.PerspectiveCamera(
     45, // field of view
@@ -58,7 +57,6 @@ function init() {
     1, // near plane
     100 // far plane
   );
-  */
 
   camera.position.set(4, 4, 4);
   camera.lookAt(0, 0, 0);
@@ -260,7 +258,7 @@ function missedTheSpot() {
 function animation(time) {
   if (lastTime) {
     const timePassed = time - lastTime;
-    const speed = 0.008;
+    const speed = 0.02;
 
     const topLayer = stack[stack.length - 1];
     const previousLayer = stack[stack.length - 2];
