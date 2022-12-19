@@ -11,6 +11,7 @@ let autopilot;
 let gameEnded;
 let robotPrecision; // Determines how precise the game is on autopilot
 
+var stream = "music.m4a";
 const scoreElement = document.getElementById("score");
 const instructionsElement = document.getElementById("instructions");
 const resultsElement = document.getElementById("results");
@@ -82,6 +83,15 @@ function init() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setAnimationLoop(animation);
   document.body.appendChild(renderer.domElement);
+
+  var audioLoader = new THREE.AudioLoader();
+  var listener = new THREE.AudioListener();
+  var audio = new THREE.Audio(listener);
+  audioLoader.load(stream, function (buffer) {
+    audio.setBuffer(buffer);
+    audio.setLoop(true);
+    audio.play();
+  });
 }
 
 function startGame() {
