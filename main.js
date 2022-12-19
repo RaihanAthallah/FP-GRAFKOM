@@ -79,19 +79,19 @@ function init() {
   scene.add(dirLight);
 
   // Set up renderer
-  renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setAnimationLoop(animation);
-  document.body.appendChild(renderer.domElement);
+  // renderer = new THREE.WebGLRenderer({ antialias: true });
+  // renderer.setSize(window.innerWidth, window.innerHeight);
+  // renderer.setAnimationLoop(animation);
+  // document.body.appendChild(renderer.domElement);
 
-  var audioLoader = new THREE.AudioLoader();
-  var listener = new THREE.AudioListener();
-  var audio = new THREE.Audio(listener);
-  audioLoader.load(stream, function (buffer) {
-    audio.setBuffer(buffer);
-    audio.setLoop(true);
-    audio.play();
-  });
+  // var audioLoader = new THREE.AudioLoader();
+  // var listener = new THREE.AudioListener();
+  // var audio = new THREE.Audio(listener);
+  // audioLoader.load(stream, function (buffer) {
+  //   audio.setBuffer(buffer);
+  //   audio.setLoop(true);
+  //   audio.play();
+  // });
 }
 
 function startGame() {
@@ -131,6 +131,15 @@ function startGame() {
     camera.position.set(4, 4, 4);
     camera.lookAt(0, 0, 0);
   }
+
+  var audioLoader = new THREE.AudioLoader();
+  var listener = new THREE.AudioListener();
+  var audio = new THREE.Audio(listener);
+  audioLoader.load(stream, function (buffer) {
+    audio.setBuffer(buffer);
+    audio.setLoop(true);
+    audio.play();
+  });
 }
 
 function addLayer(x, z, width, depth, direction) {
@@ -197,22 +206,79 @@ function cutBox(topLayer, overlap, size, delta) {
 window.addEventListener("mousedown", eventHandler);
 window.addEventListener("touchstart", eventHandler);
 window.addEventListener("keydown", function (event) {
-  if (event.key == " ") {
+  if (event.key == "1" || event.key == " ") {
     event.preventDefault();
     eventHandler();
     return;
   }
-  if (event.key == "R" || event.key == "r") {
+  if (event.key == "2" || event.key == " ") {
+    event.preventDefault();
+    eventHandler2();
+    return;
+  }
+  if (event.ctrlKey && event.key == "p") {
     event.preventDefault();
     startGame();
     return;
   }
+  // if (event.key == " ") {
+  //   event.preventDefault();
+  //   eventHandler();
+  //   return;
+  // }
+  // if (event.key == "R" || event.key == "r") {
+  //   event.preventDefault();
+  //   console.log(event);
+  //   startGame();
+  //   return;
+  // }
 });
 
 function eventHandler() {
-  if (autopilot) startGame();
+  if (autopilot){
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setAnimationLoop(animation);
+    document.body.appendChild(renderer.domElement);
+
+    // var audioLoader = new THREE.AudioLoader();
+    // var listener = new THREE.AudioListener();
+    // var audio = new THREE.Audio(listener);
+    // audioLoader.load(stream, function (buffer) {
+    //   audio.setBuffer(buffer);
+    //   audio.setLoop(true);
+    //   audio.play();
+    // });
+
+    startGame();
+  }  
   else splitBlockAndAddNextOneIfOverlaps();
 }
+function eventHandler2() {
+  if (autopilot){
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setAnimationLoop(animation2);
+    document.body.appendChild(renderer.domElement);
+
+      // var audioLoader = new THREE.AudioLoader();
+      // var listener = new THREE.AudioListener();
+      // var audio = new THREE.Audio(listener);
+      // audioLoader.load(stream, function (buffer) {
+      //   audio.setBuffer(buffer);
+      //   audio.setLoop(true);
+      //   audio.play();
+      // });
+    
+    startGame();
+  }
+  else splitBlockAndAddNextOneIfOverlaps();
+}
+
+// function eventHandler() {
+//   if (autopilot) startGame();
+//   else splitBlockAndAddNextOneIfOverlaps();
+// }
 
 function splitBlockAndAddNextOneIfOverlaps() {
   if (gameEnded) return;
@@ -268,7 +334,47 @@ function missedTheSpot() {
 function animation(time) {
   if (lastTime) {
     const timePassed = time - lastTime;
-    const speed = 0.02;
+    const speed = 0.008;
+
+    const topLayer = stack[stack.length - 1];
+    const previousLayer = stack[stack.length - 2];
+
+    // The top level box should move if the game has not ended AND
+    // it's either NOT in autopilot or it is in autopilot and the box did not yet reach the robot position
+    const boxShouldMove = !gameEnded && (!autopilot || (autopilot && topLayer.threejs.position[topLayer.direction] < previousLayer.threejs.position[topLayer.direction] + robotPrecision));
+
+    if (boxShouldMove) {
+      // Keep the position visible on UI and the position in the model in sync
+      topLayer.threejs.position[topLayer.direction] += speed * timePassed;
+      topLayer.cannonjs.position[topLayer.direction] += speed * timePassed;
+
+      // If the box went beyond the stack then show up the fail screen
+      if (topLayer.threejs.position[topLayer.direction] > 10) {
+        missedTheSpot();
+      }
+    } else {
+      // If it shouldn't move then is it because the autopilot reached the correct position?
+      // Because if so then next level is coming
+      if (autopilot) {
+        splitBlockAndAddNextOneIfOverlaps();
+        setRobotPrecision();
+      }
+    }
+
+    // 4 is the initial camera height
+    if (camera.position.y < boxHeight * (stack.length - 2) + 4) {
+      camera.position.y += speed * timePassed;
+    }
+
+    updatePhysics(timePassed);
+    renderer.render(scene, camera);
+  }
+  lastTime = time;
+}
+function animation2(time) {
+  if (lastTime) {
+    const timePassed = time - lastTime;
+    const speed = 0.020;
 
     const topLayer = stack[stack.length - 1];
     const previousLayer = stack[stack.length - 2];
