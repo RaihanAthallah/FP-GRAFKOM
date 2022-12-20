@@ -11,12 +11,12 @@ let autopilot;
 let gameEnded;
 let robotPrecision; // Determines how precise the game is on autopilot
 
-var stream = "music.m4a";
-const scoreElement = document.getElementById("score");
-const scoreElementInfo = document.getElementById("scoree");
-const instructionsElement = document.getElementById("instructions");
+var stream = 'music.m4a';
+const scoreElement = document.getElementById('score');
+const scoreElementInfo = document.getElementById('scoree');
+const instructionsElement = document.getElementById('instructions');
 // const areaElement = document.getElementsById("area");
-const resultsElement = document.getElementById("results");
+const resultsElement = document.getElementById('results');
 
 init();
 
@@ -70,7 +70,7 @@ function init() {
   addLayer(0, 0, originalBoxSize, originalBoxSize);
 
   // First layer
-  addLayer(-10, 0, originalBoxSize, originalBoxSize, "x");
+  addLayer(-10, 0, originalBoxSize, originalBoxSize, 'x');
 
   // Set up lights
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
@@ -103,9 +103,9 @@ function startGame() {
   stack = [];
   overhangs = [];
 
-  if (instructionsElement) instructionsElement.style.display = "none";
+  if (instructionsElement) instructionsElement.style.display = 'none';
   // if (areaElement) areaElement.style.display = "none";
-  if (resultsElement) resultsElement.style.display = "none";
+  if (resultsElement) resultsElement.style.display = 'none';
   if (scoreElement) scoreElement.innerText = 0;
   if (scoreElementInfo) scoreElementInfo.innerText = 0;
 
@@ -118,8 +118,8 @@ function startGame() {
 
   if (scene) {
     // Remove every Mesh from the scene
-    while (scene.children.find((c) => c.type == "Mesh")) {
-      const mesh = scene.children.find((c) => c.type == "Mesh");
+    while (scene.children.find((c) => c.type == 'Mesh')) {
+      const mesh = scene.children.find((c) => c.type == 'Mesh');
       scene.remove(mesh);
     }
 
@@ -128,7 +128,7 @@ function startGame() {
     addLayer(0, 0, originalBoxSize, originalBoxSize);
 
     // First layer
-    addLayer(-10, 0, originalBoxSize, originalBoxSize, "x");
+    addLayer(-10, 0, originalBoxSize, originalBoxSize, 'x');
   }
 
   if (camera) {
@@ -188,8 +188,8 @@ function generateBox(x, y, z, width, depth, falls) {
 
 function cutBox(topLayer, overlap, size, delta) {
   const direction = topLayer.direction;
-  const newWidth = direction == "x" ? overlap : topLayer.width;
-  const newDepth = direction == "z" ? overlap : topLayer.depth;
+  const newWidth = direction == 'x' ? overlap : topLayer.width;
+  const newDepth = direction == 'z' ? overlap : topLayer.depth;
 
   // Update metadata
   topLayer.width = newWidth;
@@ -208,44 +208,77 @@ function cutBox(topLayer, overlap, size, delta) {
   topLayer.cannonjs.addShape(shape);
 }
 
-window.addEventListener("mousedown", eventHandler);
-window.addEventListener("touchstart", eventHandler);
-window.addEventListener("keydown", function (event) {
-  if (event.key == "1" || event.key == " ") {
-    event.preventDefault();
-    eventHandler();
-    return;
-  }
-  if (event.key == "2" || event.key == " ") {
-    event.preventDefault();
-    eventHandler2();
-    return;
-  }
-  if (event.key == "3" || event.key == " ") {
-    event.preventDefault();
-    eventHandler3();
-    return;
-  }
-  if (event.ctrlKey && event.key == "p") {
-    event.preventDefault();
-    startGame();
-    return;
-  }
-  // if (event.key == " ") {
-  //   event.preventDefault();
-  //   eventHandler();
-  //   return;
-  // }
-  // if (event.key == "R" || event.key == "r") {
-  //   event.preventDefault();
-  //   console.log(event);
-  //   startGame();
-  //   return;
-  // }
+// Get references to the button elements
+var easyButton = document.getElementById('easyButton');
+var mediumButton = document.getElementById('mediumButton');
+var hardButton = document.getElementById('hardButton');
+var playAgainButton = document.getElementById('playAgainButton');
+var backButton = document.getElementById('backButton');
+
+// Attach event listeners to the buttons
+easyButton.addEventListener('click', function (event) {
+  event.preventDefault();
+  eventHandler();
+  window.addEventListener('mousedown', eventHandler);
+});
+mediumButton.addEventListener('click', function (event) {
+  event.preventDefault();
+  eventHandler2();
+  window.addEventListener('mousedown', eventHandler);
+});
+hardButton.addEventListener('click', function (event) {
+  event.preventDefault();
+  eventHandler3();
+  window.addEventListener('mousedown', eventHandler);
+});
+playAgainButton.addEventListener('click', function (event) {
+  event.preventDefault();
+  startGame();
+  window.addEventListener('mousedown', eventHandler);
+});
+backButton.addEventListener('click', function (event) {
+  event.preventDefault();
+  window.location.assign('index.html');
 });
 
+// window.addEventListener("mousedown", eventHandler);
+// window.addEventListener("touchstart", eventHandler);
+// window.addEventListener("keydown", function (event) {
+//   if (event.key == "1" || event.key == " ") {
+//     event.preventDefault();
+//     eventHandler();
+//     return;
+//   }
+//   if (event.key == "2" || event.key == " ") {
+//     event.preventDefault();
+//     eventHandler2();
+//     return;
+//   }
+//   if (event.key == "3" || event.key == " ") {
+//     event.preventDefault();
+//     eventHandler3();
+//     return;
+//   }
+//   if (event.ctrlKey && event.key == "p") {
+//     event.preventDefault();
+//     startGame();
+//     return;
+//   }
+//   // if (event.key == " ") {
+//   //   event.preventDefault();
+//   //   eventHandler();
+//   //   return;
+//   // }
+//   // if (event.key == "R" || event.key == "r") {
+//   //   event.preventDefault();
+//   //   console.log(event);
+//   //   startGame();
+//   //   return;
+//   // }
+// });
+
 function eventHandler() {
-  if (autopilot){
+  if (autopilot) {
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setAnimationLoop(animation);
@@ -261,48 +294,45 @@ function eventHandler() {
     // });
 
     startGame();
-  }  
-  else splitBlockAndAddNextOneIfOverlaps();
+  } else splitBlockAndAddNextOneIfOverlaps();
 }
 function eventHandler2() {
-  if (autopilot){
+  if (autopilot) {
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setAnimationLoop(animation2);
     document.body.appendChild(renderer.domElement);
 
-      // var audioLoader = new THREE.AudioLoader();
-      // var listener = new THREE.AudioListener();
-      // var audio = new THREE.Audio(listener);
-      // audioLoader.load(stream, function (buffer) {
-      //   audio.setBuffer(buffer);
-      //   audio.setLoop(true);
-      //   audio.play();
-      // });
-    
+    // var audioLoader = new THREE.AudioLoader();
+    // var listener = new THREE.AudioListener();
+    // var audio = new THREE.Audio(listener);
+    // audioLoader.load(stream, function (buffer) {
+    //   audio.setBuffer(buffer);
+    //   audio.setLoop(true);
+    //   audio.play();
+    // });
+
     startGame();
-  }
-  else splitBlockAndAddNextOneIfOverlaps();
+  } else splitBlockAndAddNextOneIfOverlaps();
 }
 function eventHandler3() {
-  if (autopilot){
+  if (autopilot) {
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setAnimationLoop(animation3);
     document.body.appendChild(renderer.domElement);
 
-      // var audioLoader = new THREE.AudioLoader();
-      // var listener = new THREE.AudioListener();
-      // var audio = new THREE.Audio(listener);
-      // audioLoader.load(stream, function (buffer) {
-      //   audio.setBuffer(buffer);
-      //   audio.setLoop(true);
-      //   audio.play();
-      // });
-    
+    // var audioLoader = new THREE.AudioLoader();
+    // var listener = new THREE.AudioListener();
+    // var audio = new THREE.Audio(listener);
+    // audioLoader.load(stream, function (buffer) {
+    //   audio.setBuffer(buffer);
+    //   audio.setLoop(true);
+    //   audio.play();
+    // });
+
     startGame();
-  }
-  else splitBlockAndAddNextOneIfOverlaps();
+  } else splitBlockAndAddNextOneIfOverlaps();
 }
 
 // function eventHandler() {
@@ -318,7 +348,7 @@ function splitBlockAndAddNextOneIfOverlaps() {
 
   const direction = topLayer.direction;
 
-  const size = direction == "x" ? topLayer.width : topLayer.depth;
+  const size = direction == 'x' ? topLayer.width : topLayer.depth;
   const delta = topLayer.threejs.position[direction] - previousLayer.threejs.position[direction];
   const overhangSize = Math.abs(delta);
   const overlap = size - overhangSize;
@@ -328,19 +358,19 @@ function splitBlockAndAddNextOneIfOverlaps() {
 
     // Overhang
     const overhangShift = (overlap / 2 + overhangSize / 2) * Math.sign(delta);
-    const overhangX = direction == "x" ? topLayer.threejs.position.x + overhangShift : topLayer.threejs.position.x;
-    const overhangZ = direction == "z" ? topLayer.threejs.position.z + overhangShift : topLayer.threejs.position.z;
-    const overhangWidth = direction == "x" ? overhangSize : topLayer.width;
-    const overhangDepth = direction == "z" ? overhangSize : topLayer.depth;
+    const overhangX = direction == 'x' ? topLayer.threejs.position.x + overhangShift : topLayer.threejs.position.x;
+    const overhangZ = direction == 'z' ? topLayer.threejs.position.z + overhangShift : topLayer.threejs.position.z;
+    const overhangWidth = direction == 'x' ? overhangSize : topLayer.width;
+    const overhangDepth = direction == 'z' ? overhangSize : topLayer.depth;
 
     addOverhang(overhangX, overhangZ, overhangWidth, overhangDepth);
 
     // Next layer
-    const nextX = direction == "x" ? topLayer.threejs.position.x : -10;
-    const nextZ = direction == "z" ? topLayer.threejs.position.z : -10;
+    const nextX = direction == 'x' ? topLayer.threejs.position.x : -10;
+    const nextZ = direction == 'z' ? topLayer.threejs.position.z : -10;
     const newWidth = topLayer.width; // New layer has the same size as the cut top layer
     const newDepth = topLayer.depth; // New layer has the same size as the cut top layer
-    const nextDirection = direction == "x" ? "z" : "x";
+    const nextDirection = direction == 'x' ? 'z' : 'x';
 
     if (scoreElement) scoreElement.innerText = stack.length - 1;
     if (scoreElementInfo) scoreElementInfo.innerText = stack.length - 1;
@@ -359,7 +389,7 @@ function missedTheSpot() {
   scene.remove(topLayer.threejs);
 
   gameEnded = true;
-  if (resultsElement && !autopilot) resultsElement.style.display = "flex";
+  if (resultsElement && !autopilot) resultsElement.style.display = 'flex';
 }
 
 function animation(time) {
@@ -493,9 +523,9 @@ function updatePhysics(timePassed) {
   });
 }
 
-window.addEventListener("resize", () => {
+window.addEventListener('resize', () => {
   // Adjust camera
-  console.log("resize", window.innerWidth, window.innerHeight);
+  console.log('resize', window.innerWidth, window.innerHeight);
   const aspect = window.innerWidth / window.innerHeight;
   const width = 10;
   const height = width / aspect;
