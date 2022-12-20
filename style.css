@@ -40,10 +40,38 @@ a:visited {
 
 #results .content,
 #instructions .content {
-  max-width: 300px;
-  padding: 50px;
+  max-width: 850px;
+  padding: 35px;
   border-radius: 20px;
-  background-color: aliceblue;
+  background-color: hsla(0, 0%, 100%, 0.75);;
+  /* opacity: ; */
+}
+
+.content .level{
+  box-shadow: 1px 1px 25px #8f94fb;
+  background-color: white;
+  border-radius: 5em;
+  width: 100rem;
+  height: 5rem;
+  padding-top: 1.7rem;
+  margin: 25px;
+}
+
+.content .note{
+  box-shadow: 1px 1px 25px #8f94fb;
+  background-color: white;
+  border-radius: 5em;
+  width: 30rem;
+  height: 5rem;
+  padding-top: 1.7rem;
+  margin: 25px;
+}
+
+.content .fp{
+  margin: 0 15em 0.5em 15em;
+  border-radius: 3em;
+  color: white;
+  background: linear-gradient(to left, #8f94fb, #7c7fc9); 
 }
 
 #results {
@@ -59,8 +87,6 @@ a:visited {
   top: 30px;
   right: 30px;
 }
-
-
 
 .area{
     background: #4e54c8;  
