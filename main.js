@@ -216,6 +216,11 @@ window.addEventListener("keydown", function (event) {
     eventHandler2();
     return;
   }
+  if (event.key == "3" || event.key == " ") {
+    event.preventDefault();
+    eventHandler3();
+    return;
+  }
   if (event.ctrlKey && event.key == "p") {
     event.preventDefault();
     startGame();
@@ -259,6 +264,26 @@ function eventHandler2() {
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setAnimationLoop(animation2);
+    document.body.appendChild(renderer.domElement);
+
+      // var audioLoader = new THREE.AudioLoader();
+      // var listener = new THREE.AudioListener();
+      // var audio = new THREE.Audio(listener);
+      // audioLoader.load(stream, function (buffer) {
+      //   audio.setBuffer(buffer);
+      //   audio.setLoop(true);
+      //   audio.play();
+      // });
+    
+    startGame();
+  }
+  else splitBlockAndAddNextOneIfOverlaps();
+}
+function eventHandler3() {
+  if (autopilot){
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setAnimationLoop(animation3);
     document.body.appendChild(renderer.domElement);
 
       // var audioLoader = new THREE.AudioLoader();
@@ -334,7 +359,7 @@ function missedTheSpot() {
 function animation(time) {
   if (lastTime) {
     const timePassed = time - lastTime;
-    const speed = 0.008;
+    const speed = 0.0055;
 
     const topLayer = stack[stack.length - 1];
     const previousLayer = stack[stack.length - 2];
@@ -372,6 +397,46 @@ function animation(time) {
   lastTime = time;
 }
 function animation2(time) {
+  if (lastTime) {
+    const timePassed = time - lastTime;
+    const speed = 0.0099;
+
+    const topLayer = stack[stack.length - 1];
+    const previousLayer = stack[stack.length - 2];
+
+    // The top level box should move if the game has not ended AND
+    // it's either NOT in autopilot or it is in autopilot and the box did not yet reach the robot position
+    const boxShouldMove = !gameEnded && (!autopilot || (autopilot && topLayer.threejs.position[topLayer.direction] < previousLayer.threejs.position[topLayer.direction] + robotPrecision));
+
+    if (boxShouldMove) {
+      // Keep the position visible on UI and the position in the model in sync
+      topLayer.threejs.position[topLayer.direction] += speed * timePassed;
+      topLayer.cannonjs.position[topLayer.direction] += speed * timePassed;
+
+      // If the box went beyond the stack then show up the fail screen
+      if (topLayer.threejs.position[topLayer.direction] > 10) {
+        missedTheSpot();
+      }
+    } else {
+      // If it shouldn't move then is it because the autopilot reached the correct position?
+      // Because if so then next level is coming
+      if (autopilot) {
+        splitBlockAndAddNextOneIfOverlaps();
+        setRobotPrecision();
+      }
+    }
+
+    // 4 is the initial camera height
+    if (camera.position.y < boxHeight * (stack.length - 2) + 4) {
+      camera.position.y += speed * timePassed;
+    }
+
+    updatePhysics(timePassed);
+    renderer.render(scene, camera);
+  }
+  lastTime = time;
+}
+function animation3(time) {
   if (lastTime) {
     const timePassed = time - lastTime;
     const speed = 0.020;
