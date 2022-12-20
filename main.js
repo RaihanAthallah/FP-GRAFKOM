@@ -14,6 +14,7 @@ let robotPrecision; // Determines how precise the game is on autopilot
 var stream = "music.m4a";
 const scoreElement = document.getElementById("score");
 const instructionsElement = document.getElementById("instructions");
+// const areaElement = document.getElementsById("area");
 const resultsElement = document.getElementById("results");
 
 init();
@@ -102,6 +103,7 @@ function startGame() {
   overhangs = [];
 
   if (instructionsElement) instructionsElement.style.display = "none";
+  // if (areaElement) areaElement.style.display = "none";
   if (resultsElement) resultsElement.style.display = "none";
   if (scoreElement) scoreElement.innerText = 0;
 
@@ -120,6 +122,7 @@ function startGame() {
     }
 
     // Foundation
+    addLayer(0, 0);
     addLayer(0, 0, originalBoxSize, originalBoxSize);
 
     // First layer
@@ -439,7 +442,7 @@ function animation2(time) {
 function animation3(time) {
   if (lastTime) {
     const timePassed = time - lastTime;
-    const speed = 0.020;
+    const speed = 0.018;
 
     const topLayer = stack[stack.length - 1];
     const previousLayer = stack[stack.length - 2];
