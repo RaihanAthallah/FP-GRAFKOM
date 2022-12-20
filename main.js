@@ -13,6 +13,7 @@ let robotPrecision; // Determines how precise the game is on autopilot
 
 var stream = "music.m4a";
 const scoreElement = document.getElementById("score");
+const scoreElementInfo = document.getElementById("scoree");
 const instructionsElement = document.getElementById("instructions");
 // const areaElement = document.getElementsById("area");
 const resultsElement = document.getElementById("results");
@@ -54,7 +55,7 @@ function init() {
 
   // If you want to use perspective camera instead, uncomment these lines
   camera = new THREE.PerspectiveCamera(
-    45, // field of view
+    65, // field of view
     aspect, // aspect ratio
     1, // near plane
     100 // far plane
@@ -106,6 +107,7 @@ function startGame() {
   // if (areaElement) areaElement.style.display = "none";
   if (resultsElement) resultsElement.style.display = "none";
   if (scoreElement) scoreElement.innerText = 0;
+  if (scoreElementInfo) scoreElementInfo.innerText = 0;
 
   if (world) {
     // Remove every object from world
@@ -341,6 +343,7 @@ function splitBlockAndAddNextOneIfOverlaps() {
     const nextDirection = direction == "x" ? "z" : "x";
 
     if (scoreElement) scoreElement.innerText = stack.length - 1;
+    if (scoreElementInfo) scoreElementInfo.innerText = stack.length - 1;
     addLayer(nextX, nextZ, newWidth, newDepth, nextDirection);
   } else {
     missedTheSpot();
@@ -362,7 +365,7 @@ function missedTheSpot() {
 function animation(time) {
   if (lastTime) {
     const timePassed = time - lastTime;
-    const speed = 0.0055;
+    const speed = 0.0025;
 
     const topLayer = stack[stack.length - 1];
     const previousLayer = stack[stack.length - 2];

@@ -73,6 +73,11 @@ a:visited {
   color: white;
   background: linear-gradient(to left, #8f94fb, #7c7fc9); 
 }
+.content .scoree{
+  border-radius: 3em;
+  color: white;
+  background: linear-gradient(to left, #8f94fb, #7c7fc9); 
+}
 
 #results {
 }
