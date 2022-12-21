@@ -61,7 +61,7 @@ function init() {
     100 // far plane
   );
 
-  camera.position.set(4, 4, 4);
+  camera.position.set(5, 5, 5);
   camera.lookAt(0, 0, 0);
 
   scene = new THREE.Scene();
