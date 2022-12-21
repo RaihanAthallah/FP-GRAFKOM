@@ -44,15 +44,6 @@ function init() {
   const width = 10;
   const height = width / aspect;
 
-  // camera = new THREE.OrthographicCamera(
-  //   width / -2, // left
-  //   width / 2, // right
-  //   height / 2, // top
-  //   height / -2, // bottom
-  //   0, // near plane
-  //   100 // far plane
-  // );
-
   // If you want to use perspective camera instead, uncomment these lines
   camera = new THREE.PerspectiveCamera(
     65, // field of view
@@ -79,21 +70,6 @@ function init() {
   const dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
   dirLight.position.set(10, 20, 0);
   scene.add(dirLight);
-
-  // Set up renderer
-  // renderer = new THREE.WebGLRenderer({ antialias: true });
-  // renderer.setSize(window.innerWidth, window.innerHeight);
-  // renderer.setAnimationLoop(animation);
-  // document.body.appendChild(renderer.domElement);
-
-  // var audioLoader = new THREE.AudioLoader();
-  // var listener = new THREE.AudioListener();
-  // var audio = new THREE.Audio(listener);
-  // audioLoader.load(stream, function (buffer) {
-  //   audio.setBuffer(buffer);
-  //   audio.setLoop(true);
-  //   audio.play();
-  // });
 }
 
 function startGame() {
@@ -241,57 +217,12 @@ backButton.addEventListener('click', function (event) {
   window.location.assign('index.html');
 });
 
-// window.addEventListener("mousedown", eventHandler);
-// window.addEventListener("touchstart", eventHandler);
-// window.addEventListener("keydown", function (event) {
-//   if (event.key == "1" || event.key == " ") {
-//     event.preventDefault();
-//     eventHandler();
-//     return;
-//   }
-//   if (event.key == "2" || event.key == " ") {
-//     event.preventDefault();
-//     eventHandler2();
-//     return;
-//   }
-//   if (event.key == "3" || event.key == " ") {
-//     event.preventDefault();
-//     eventHandler3();
-//     return;
-//   }
-//   if (event.ctrlKey && event.key == "p") {
-//     event.preventDefault();
-//     startGame();
-//     return;
-//   }
-//   // if (event.key == " ") {
-//   //   event.preventDefault();
-//   //   eventHandler();
-//   //   return;
-//   // }
-//   // if (event.key == "R" || event.key == "r") {
-//   //   event.preventDefault();
-//   //   console.log(event);
-//   //   startGame();
-//   //   return;
-//   // }
-// });
-
 function eventHandler() {
   if (autopilot) {
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setAnimationLoop(animation);
     document.body.appendChild(renderer.domElement);
-
-    // var audioLoader = new THREE.AudioLoader();
-    // var listener = new THREE.AudioListener();
-    // var audio = new THREE.Audio(listener);
-    // audioLoader.load(stream, function (buffer) {
-    //   audio.setBuffer(buffer);
-    //   audio.setLoop(true);
-    //   audio.play();
-    // });
 
     startGame();
   } else splitBlockAndAddNextOneIfOverlaps();
@@ -303,15 +234,6 @@ function eventHandler2() {
     renderer.setAnimationLoop(animation2);
     document.body.appendChild(renderer.domElement);
 
-    // var audioLoader = new THREE.AudioLoader();
-    // var listener = new THREE.AudioListener();
-    // var audio = new THREE.Audio(listener);
-    // audioLoader.load(stream, function (buffer) {
-    //   audio.setBuffer(buffer);
-    //   audio.setLoop(true);
-    //   audio.play();
-    // });
-
     startGame();
   } else splitBlockAndAddNextOneIfOverlaps();
 }
@@ -322,23 +244,9 @@ function eventHandler3() {
     renderer.setAnimationLoop(animation3);
     document.body.appendChild(renderer.domElement);
 
-    // var audioLoader = new THREE.AudioLoader();
-    // var listener = new THREE.AudioListener();
-    // var audio = new THREE.Audio(listener);
-    // audioLoader.load(stream, function (buffer) {
-    //   audio.setBuffer(buffer);
-    //   audio.setLoop(true);
-    //   audio.play();
-    // });
-
     startGame();
   } else splitBlockAndAddNextOneIfOverlaps();
 }
-
-// function eventHandler() {
-//   if (autopilot) startGame();
-//   else splitBlockAndAddNextOneIfOverlaps();
-// }
 
 function splitBlockAndAddNextOneIfOverlaps() {
   if (gameEnded) return;
@@ -435,7 +343,7 @@ function animation(time) {
 function animation2(time) {
   if (lastTime) {
     const timePassed = time - lastTime;
-    const speed = 0.0099;
+    const speed = 0.0089;
 
     const topLayer = stack[stack.length - 1];
     const previousLayer = stack[stack.length - 2];
