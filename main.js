@@ -63,7 +63,7 @@ function init() {
   // First layer
   addLayer(-10, 0, originalBoxSize, originalBoxSize, 'x');
 
-  // Set up lights
+  // Set up lights (pencahayaan)
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
   scene.add(ambientLight);
 
